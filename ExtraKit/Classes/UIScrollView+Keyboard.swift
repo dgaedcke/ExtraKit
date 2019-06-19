@@ -4,29 +4,29 @@ private let observerAssociatedValueKey = "com.rickb.extrakit.UIScrollView.Keyboa
 private let revealViewAssociatedValueKey = "com.rickb.extrakit.UIScrollView.viewForKeyboardReveal"
 
 public extension UIScrollView {
-	func adjustContentInsetForKeyboardFrame()
+	@objc func adjustContentInsetForKeyboardFrame()
 	{
 		set(associatedValue: KeyboardNotificationObserver(scrollView: self), forKey: observerAssociatedValueKey)
 	}
 }
 
 class KeyboardNotificationObserver: NSObject {
-	weak var scrollView: UIScrollView?
+	@objc weak var scrollView: UIScrollView?
 	var contentInset: UIEdgeInsets?
 	
-	init(scrollView: UIScrollView) {
+	@objc init(scrollView: UIScrollView) {
 		super.init()
 
 		self.scrollView = scrollView
 
-		startObserving(NSNotification.Name.UIKeyboardWillChangeFrame) { [weak self] note in
+		startObserving(UIResponder.keyboardWillChangeFrameNotification) { [weak self] note in
 			if self?.contentInset == nil {
 				self?.contentInset = scrollView.contentInset
 			}
 			scrollView.contentInset.bottom = self?.adjustedKeyboardFrameHeight(note) ?? 0
 		}
 		
-		startObserving(NSNotification.Name.UIKeyboardWillHide) { [weak self] note in
+		startObserving(UIResponder.keyboardWillHideNotification) { [weak self] note in
 			if let contentInset = self?.contentInset {
 				self?.scrollView?.contentInset = contentInset
 				self?.contentInset = nil
@@ -34,7 +34,7 @@ class KeyboardNotificationObserver: NSObject {
 		}
 	}
 	
-	func adjustedKeyboardFrameHeight(_ note: Notification) -> CGFloat {
+	@objc func adjustedKeyboardFrameHeight(_ note: Notification) -> CGFloat {
 		guard let scrollView = scrollView, let keyboardFrame = note.keyboardFrameEnd else {
 			return 0
 		}

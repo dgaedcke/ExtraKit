@@ -4,7 +4,7 @@ private let imageColorAssociatedValueKey = "com.rickb.extrakit.UIImage.imageWith
 
 public extension UIImage {
 
-	var imageColor: UIColor? {
+	@objc var imageColor: UIColor? {
 		get {
 			return associatedValue(forKey: imageColorAssociatedValueKey)
 		}
@@ -13,7 +13,7 @@ public extension UIImage {
 		}
 	}
 
-	class func draw(size: CGSize,  scale: CGFloat = UIScreen.main.scale, draw: (_ context: CGContext, _ bounds: CGRect)->Void) -> UIImage? {
+	@objc class func draw(size: CGSize,  scale: CGFloat = UIScreen.main.scale, draw: (_ context: CGContext, _ bounds: CGRect)->Void) -> UIImage? {
 
         UIGraphicsBeginImageContextWithOptions(size, false, scale)
 		guard let context = UIGraphicsGetCurrentContext() else {
@@ -28,7 +28,7 @@ public extension UIImage {
 		return image
 	}
 
-    class func image(color: UIColor)-> UIImage? {
+    @objc class func image(color: UIColor)-> UIImage? {
 
 		let image = draw(size: CGSize(width: 1,height: 1), scale:1.0) { context, bounds in
 			color.set()
@@ -38,7 +38,7 @@ public extension UIImage {
 		return image
     }
 	
-	class func filledCircle(radius r: CGFloat, color: UIColor, scale: CGFloat = UIScreen.main.scale) -> UIImage? {
+	@objc class func filledCircle(radius r: CGFloat, color: UIColor, scale: CGFloat = UIScreen.main.scale) -> UIImage? {
 
 		return draw(size: CGSize(width: r,height: r)) { context, bounds in
 			color.set()
@@ -46,7 +46,7 @@ public extension UIImage {
 		}
 	}
 
-	class func strokeCircle(radius r: CGFloat, width w: CGFloat, color: UIColor, scale: CGFloat = UIScreen.main.scale) -> UIImage? {
+	@objc class func strokeCircle(radius r: CGFloat, width w: CGFloat, color: UIColor, scale: CGFloat = UIScreen.main.scale) -> UIImage? {
 
 		return draw(size: CGSize(width: r,height: r)) { context, bounds in
 			color.set()
@@ -55,7 +55,7 @@ public extension UIImage {
 		}
 	}
 	
-	class func filledRect(size s: CGSize, color: UIColor, scale: CGFloat = UIScreen.main.scale) -> UIImage? {
+	@objc class func filledRect(size s: CGSize, color: UIColor, scale: CGFloat = UIScreen.main.scale) -> UIImage? {
 
 		return draw(size: s) { context, bounds in
 			color.set()
@@ -63,7 +63,7 @@ public extension UIImage {
 		}
 	}
 	
-	class func strokeRect(size s: CGSize, width w: CGFloat, color: UIColor, scale: CGFloat = UIScreen.main.scale) -> UIImage? {
+	@objc class func strokeRect(size s: CGSize, width w: CGFloat, color: UIColor, scale: CGFloat = UIScreen.main.scale) -> UIImage? {
 
 		return draw(size: s) { context, bounds in
 			color.set()

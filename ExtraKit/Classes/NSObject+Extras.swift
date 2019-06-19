@@ -5,7 +5,7 @@ private var associatedDictionaryKey = 0
 
 public extension NSObject {
 
-	var associatedDictionary: NSMutableDictionary {
+	@objc var associatedDictionary: NSMutableDictionary {
 		get {
 			if let dict = objc_getAssociatedObject(self, &associatedDictionaryKey) as? NSMutableDictionary {
 				return dict
@@ -20,7 +20,7 @@ public extension NSObject {
 		return associatedDictionary[key] as? T
 	}
 	
-	func set(associatedValue value: Any?, forKey key: String) {
+	@objc func set(associatedValue value: Any?, forKey key: String) {
 		associatedDictionary[key] = value
 	}
 
@@ -28,7 +28,7 @@ public extension NSObject {
 		return (associatedDictionary[key] as? WeakObjectRef)?.object as? T
 	}
 	
-	func set(weakAssociatedValue value: AnyObject?, forKey key: String) {
+	@objc func set(weakAssociatedValue value: AnyObject?, forKey key: String) {
 		associatedDictionary[key] = WeakObjectRef(value)
 	}
 }
@@ -37,22 +37,26 @@ private let associatedValueKey = "com.rickb.extrakit.Observing"
 
 public extension NSObject
 {
-	func startObserving(_ name: NSNotification.Name, object: AnyHashable? = nil, queue: OperationQueue? = nil, usingBlock block: @escaping (Notification) -> Void) {
+	@objc func startObserving(_ name: NSNotification.Name, object: AnyHashable? = nil, queue: OperationQueue? = nil, usingBlock block: @escaping (Notification) -> Void) {
 		set(associatedValue: NotificationCenter.default.addObserver(forName: name, object: object, queue: queue, using: block)
 		, forKey: "\(associatedValueKey).\(name).\(object?.hashValue ?? 0)")
 	}
 	
-	func stopObserving(_ name: NSNotification.Name, object: AnyHashable? = nil) {
+	@objc func stopObserving(_ name: NSNotification.Name, object: AnyHashable? = nil) {
 		set(associatedValue: nil, forKey: "\(associatedValueKey).\(name).\(object?.hashValue ?? 0)")
 	}
 }
 
 public extension NSObject {
 
-	class func swizzle(_ originalSelector: Selector, newSelector: Selector) {
+	@objc class func swizzle(_ originalSelector: Selector, newSelector: Selector) {
 		
-		let originalMethod = class_getInstanceMethod(self, originalSelector)
-		let newMethod = class_getInstanceMethod(self, newSelector)
+		guard let originalMethod = class_getInstanceMethod(self, originalSelector),
+			let newMethod = class_getInstanceMethod(self, newSelector)
+		else {
+			print("Serious error in Swizzle!  methods not found")
+			return
+		}
 		
 		let methodAdded = class_addMethod(self, originalSelector, method_getImplementation(newMethod), method_getTypeEncoding(newMethod))
 		if methodAdded {
@@ -64,9 +68,9 @@ public extension NSObject {
 }
 
 class WeakObjectRef: NSObject {
-	weak var object: AnyObject?
+	@objc weak var object: AnyObject?
 	
-	init?(_ object: AnyObject?) {
+	@objc init?(_ object: AnyObject?) {
 		guard let object = object else {
 			return nil
 		}
@@ -76,14 +80,14 @@ class WeakObjectRef: NSObject {
 
 class KVOObserver: NSObject {
 
-	var keyPath: String
-	var block:(Void)->Void
+	@objc var keyPath: String
+	@objc var block:()->Void
 	
 	override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
 	 	block()
 	}
 	
-	init(keyPath: String, block: @escaping (Void)->Void) {
+	@objc init(keyPath: String, block: @escaping ()->Void) {
 		self.keyPath = keyPath
 		self.block = block
 		super.init()
@@ -92,13 +96,13 @@ class KVOObserver: NSObject {
 
 public extension NSObject {
 
-	@discardableResult func observe(keyPath: String, block: @escaping (Void)->Void) -> AnyHashable {
+	@objc @discardableResult func observe(keyPath: String, block: @escaping ()->Void) -> AnyHashable {
 		let observer = KVOObserver(keyPath: keyPath, block: block)
 		addObserver(observer, forKeyPath: keyPath, options: .new, context: nil)
 		return observer
 	}
 	
-	func stopObserving(keyPathObserver: AnyHashable?) {
+	@objc func stopObserving(keyPathObserver: AnyHashable?) {
 		if let observer = keyPathObserver as? KVOObserver {
 			removeObserver(observer, forKeyPath: observer.keyPath)
 		}

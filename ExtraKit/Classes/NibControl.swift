@@ -22,7 +22,7 @@ import UIKit
 		translatesAutoresizingMaskIntoConstraints = false
 	}
 
-	public init(nibName: String, resizeToNib: Bool = true) {
+	@objc public init(nibName: String, resizeToNib: Bool = true) {
 		super.init(frame: CGRect(x: 0,y: 0,width: 320,height: 320))
 		translatesAutoresizingMaskIntoConstraints = false
 		self.resizeToNib = resizeToNib
@@ -46,7 +46,7 @@ import UIKit
 		}
 	}
 
-	func addNibView(_ view: UIView?) {
+	@objc func addNibView(_ view: UIView?) {
 		guard let view = view  else {
 			return
 		}
@@ -67,11 +67,11 @@ import UIKit
 
 public extension UIBarButtonItem {
 	
-	var control: UIControl? {
+	@objc var control: UIControl? {
 		return customView as? UIControl
 	}
 	
-	convenience init(nibName: String) {
+	@objc convenience init(nibName: String) {
 		self.init(customView: NibControl(nibName: nibName))
 		width = customView?.bounds.size.width ?? 0
 	}

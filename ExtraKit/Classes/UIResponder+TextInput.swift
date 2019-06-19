@@ -41,11 +41,11 @@ public extension UIResponder {
 		}
 	}
 
-	var previousNextSegmentControl: UISegmentedControl? {
+	@objc var previousNextSegmentControl: UISegmentedControl? {
 		return previousNextDoneInputAccessory?.items?.first?.customView as? UISegmentedControl
 	}
 	
-	var previousNextDoneInputAccessory: UIToolbar? {
+	@objc var previousNextDoneInputAccessory: UIToolbar? {
 		guard self is UITextInputTraits  else { return nil }
 
 		if let tf = self as? UITextField {
@@ -57,7 +57,7 @@ public extension UIResponder {
 		}
 	}
 	
-	func createPreviousNextDoneInputAccessory() {
+	@objc func createPreviousNextDoneInputAccessory() {
 		guard let tf = self as? UITextInputTraits , previousNextDoneInputAccessory == nil else { return }
 
 		let segmentControl = UISegmentedControl(items: ["Prev".localized,"Next".localized])
@@ -83,23 +83,23 @@ public extension UIResponder {
 		updatePreviousNextSegmentControlState()
 	}
 	
-	func becomePreviousFirstResponder(_ sender: UIResponder) -> Bool {
+	@objc func becomePreviousFirstResponder(_ sender: UIResponder) -> Bool {
 		return becomeFirstResponder()
 	}
 	
-	func becomeNextFirstResponder(_ sender: UIResponder) -> Bool {
+	@objc func becomeNextFirstResponder(_ sender: UIResponder) -> Bool {
 		return becomeFirstResponder()
 	}
 	
-	@discardableResult func becomePreviousInputResponder() -> Bool {
+	@objc @discardableResult func becomePreviousInputResponder() -> Bool {
 		return self.previousTextInputResponder?.becomePreviousFirstResponder(self) ?? false
 	}
 	
-	@discardableResult func becomeNextInputResponder() -> Bool {
+	@objc @discardableResult func becomeNextInputResponder() -> Bool {
 		return self.nextTextInputResponder?.becomeNextFirstResponder(self) ?? false
 	}
 
-	func prevNextResponder(_ sender: UISegmentedControl) {
+	@objc func prevNextResponder(_ sender: UISegmentedControl) {
 		if sender.selectedSegmentIndex == 0 {
 			becomePreviousInputResponder()
 		} else {
@@ -107,7 +107,7 @@ public extension UIResponder {
 		}
 	}
 	
-	func updatePreviousNextSegmentControlState() {
+	@objc func updatePreviousNextSegmentControlState() {
 		previousNextSegmentControl?.setEnabled(previousTextInputResponder != nil && previousTextInputResponder!.canBecomeFirstResponder, forSegmentAt: 0)
 		previousNextSegmentControl?.setEnabled(nextTextInputResponder != nil && nextTextInputResponder!.canBecomeFirstResponder, forSegmentAt: 1)
 	}

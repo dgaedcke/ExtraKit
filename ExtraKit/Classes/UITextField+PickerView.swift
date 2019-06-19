@@ -2,9 +2,9 @@
 
 open class PickerInputView: UIPickerView, UIPickerViewDataSource, UIPickerViewDelegate
 {
-	var components = [[String]]()
+	@objc var components = [[String]]()
 
-	weak var textField: UITextField?
+	@objc weak var textField: UITextField?
 
 	var selectedValues: [String?] {
 		return (0..<components.count).map {
@@ -12,7 +12,7 @@ open class PickerInputView: UIPickerView, UIPickerViewDataSource, UIPickerViewDe
 		}
 	}
 	
-	func selectedValue(_ component: Int = 0) -> String? {
+	@objc func selectedValue(_ component: Int = 0) -> String? {
 		let selectedRow = self.selectedRow(inComponent: component)
 		if selectedRow < 0 { return nil }
 		return components[component][selectedRow]
@@ -31,19 +31,19 @@ open class PickerInputView: UIPickerView, UIPickerViewDataSource, UIPickerViewDe
 	}
 	
 	open func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-		textField?.text = selectedValues.flatMap{$0}.joined(separator: " ")
-		NotificationCenter.default.post(name: NSNotification.Name.UITextFieldTextDidChange, object: textField)
+		textField?.text = selectedValues.compactMap{$0}.joined(separator: " ")
+		NotificationCenter.default.post(name: UITextField.textDidChangeNotification, object: textField)
 		textField?.sendActions(for: .editingChanged)
 	}
 }
 
 public extension UITextField
 {
-	var pickerView: PickerInputView? {
+	@objc var pickerView: PickerInputView? {
 		return inputView as? PickerInputView
 	}
 	
-	@discardableResult func setPicker(components: [[String]]) -> PickerInputView {
+	@objc @discardableResult func setPicker(components: [[String]]) -> PickerInputView {
 		let pickerView = PickerInputView()
 		pickerView.components = components
 		pickerView.textField = self
@@ -54,12 +54,12 @@ public extension UITextField
 		return pickerView
 	}
 	
-	func select(row: Int, component: Int = 0, animated: Bool = false) {
+	@objc func select(row: Int, component: Int = 0, animated: Bool = false) {
 		pickerView?.selectRow(row, inComponent: component, animated: true)
 		text = pickerView?.components[component][row]
 	}
 	
-	func select(value: String, component: Int = 0, animated: Bool = false) {
+	@objc func select(value: String, component: Int = 0, animated: Bool = false) {
 		if let index = pickerView?.components[component].index(of: value) {
 			pickerView?.selectRow(index, inComponent: component, animated: animated)
 		}

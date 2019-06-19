@@ -5,7 +5,7 @@ private let associatedValueKey = "com.rickb.extrakit.actionBlocks"
 
 public extension NSObject {
 	
-	var actionBlocks: NSMutableSet {
+	@objc var actionBlocks: NSMutableSet {
 		if let set: NSMutableSet = associatedValue(forKey: associatedValueKey) {
 			return set
 		}
@@ -14,7 +14,7 @@ public extension NSObject {
 		return mset
 	}
 	
-	func removeActionBlock(_ block: Any?) {
+	@objc func removeActionBlock(_ block: Any?) {
 		if let block = block {
 			actionBlocks.remove(block)
 		}
@@ -23,7 +23,7 @@ public extension NSObject {
 
 public extension UIControl {
 
-	@discardableResult func addControlEvents<T:UIControl>(_ controlEvents: UIControlEvents = .touchUpInside, block: @escaping (T)->Void) -> Any? {
+	@discardableResult func addControlEvents<T:UIControl>(_ controlEvents: UIControl.Event = .touchUpInside, block: @escaping (T)->Void) -> Any? {
 		guard self is T else {
 			return nil
 		}
@@ -33,7 +33,7 @@ public extension UIControl {
 		}
 	}
 
-	@discardableResult func addControlEvents(_ controlEvents: UIControlEvents = .touchUpInside, block: @escaping ()->Void) -> Any {
+	@objc @discardableResult func addControlEvents(_ controlEvents: UIControl.Event = .touchUpInside, block: @escaping ()->Void) -> Any {
 		return VoidActionBlock(block).configure {
 			addTarget($0, action: #selector(VoidActionBlock.execute), for: controlEvents)
 			actionBlocks.add($0)
@@ -43,12 +43,12 @@ public extension UIControl {
 
 public extension UIGestureRecognizer {
 
-	convenience init(block: @escaping (UIGestureRecognizer)->Void) {
+	@objc convenience init(block: @escaping (UIGestureRecognizer)->Void) {
 		self.init()
 		addAction(block)
 	}
 	
-	@discardableResult func addAction(_ block: @escaping (UIGestureRecognizer)->Void) -> Any {
+	@objc @discardableResult func addAction(_ block: @escaping (UIGestureRecognizer)->Void) -> Any {
 		return ActionBlock(block).configure {
 			addTarget($0, action: #selector(ActionBlock.execute(_:)))
 			self.actionBlocks.add($0)
@@ -58,12 +58,12 @@ public extension UIGestureRecognizer {
 
 public extension UIBarButtonItem {
 
-	convenience init(block: @escaping (UIBarButtonItem)->Void) {
+	@objc convenience init(block: @escaping (UIBarButtonItem)->Void) {
 		self.init()
 		setBlock(block)
 	}
 	
-	@discardableResult func setBlock(_ block: @escaping (UIBarButtonItem)->Void) -> Any {
+	@objc @discardableResult func setBlock(_ block: @escaping (UIBarButtonItem)->Void) -> Any {
 		return ActionBlock(block).configure {
 			target = $0
 			action = #selector(ActionBlock.execute(_:))
@@ -75,13 +75,13 @@ public extension UIBarButtonItem {
 
 class VoidActionBlock: NSObject {
 	
-	var block: ()->Void
+	@objc var block: ()->Void
 	
-	init(_ block: @escaping ()->Void) {
+	@objc init(_ block: @escaping ()->Void) {
 		self.block = block
 	}
 	
-	func execute() {
+	@objc func execute() {
 		block()
 	}
 }
@@ -94,7 +94,7 @@ class ActionBlock<T:NSObject>: NSObject {
 		self.block = block
 	}
 	
-	func execute(_ control: UIControl) {
+	@objc func execute(_ control: UIControl) {
 		if let control = control as? T {
 			block(control)
 		}

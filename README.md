@@ -1,5 +1,7 @@
 # ExtraKit
 
+### Custom version for Swift 4.2 by DG
+
 [![CI Status](http://img.shields.io/travis/Richard Burgess/ExtraKit.svg?style=flat)](https://travis-ci.org/Richard Burgess/ExtraKit)
 [![Version](https://img.shields.io/cocoapods/v/ExtraKit.svg?style=flat)](http://cocoapods.org/pods/ExtraKit)
 [![License](https://img.shields.io/cocoapods/l/ExtraKit.svg?style=flat)](http://cocoapods.org/pods/ExtraKit)

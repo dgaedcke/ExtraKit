@@ -2,19 +2,19 @@ import UIKit
 
 open class DatePickerInputView: UIDatePicker
 {
-	weak var textField: UITextField?
-	var dateFormatter: DateFormatter!
-	var dateString: String {
+	@objc weak var textField: UITextField?
+	@objc var dateFormatter: DateFormatter!
+	@objc var dateString: String {
 		return dateFormatter.string(from: date)
 	}
 	
-	func dateChanged() {
+	@objc func dateChanged() {
 		textField?.text = dateString
-		NotificationCenter.default.post(name: NSNotification.Name.UITextFieldTextDidChange, object: textField)
+		NotificationCenter.default.post(name: UITextField.textDidChangeNotification, object: textField)
 		textField?.sendActions(for: .editingChanged)
 	}
 	
-	func setDate(text: String?) {
+	@objc func setDate(text: String?) {
 		if let text = text, let textDate = dateFormatter.date(from: text) {
 			date = textDate
 			textField?.text = text
@@ -24,11 +24,11 @@ open class DatePickerInputView: UIDatePicker
 
 public extension UITextField
 {
-	var datePickerView: DatePickerInputView? {
+	@objc var datePickerView: DatePickerInputView? {
 		return inputView as? DatePickerInputView
 	}
 	
-	@discardableResult func set(datePickerMode mode:UIDatePickerMode, dateFormatter: DateFormatter) -> DatePickerInputView {
+	@objc @discardableResult func set(datePickerMode mode:UIDatePicker.Mode, dateFormatter: DateFormatter) -> DatePickerInputView {
 
 		let picker = DatePickerInputView()
 		picker.dateFormatter = dateFormatter
@@ -42,7 +42,7 @@ public extension UITextField
 		return picker
 	}
 	
-	var datePickerDate: Date? {
+	@objc var datePickerDate: Date? {
 		get {
 			return (text == datePickerView?.dateString) ? datePickerView?.date : nil
 		}

@@ -2,7 +2,7 @@ import UIKit
 
 public extension UIStoryboardSegue {
 
-	@discardableResult func perform(action: Any?) -> Bool {
+	@objc @discardableResult func perform(action: Any?) -> Bool {
 		guard let action = action as? SegueAction  else {
 			return false
 		}
@@ -21,11 +21,11 @@ open class SegueAction {
 
 public extension UIViewController {
 	
-	class func swizzlePrepareForSegueAction() {
+	@objc class func swizzlePrepareForSegueAction() {
 		swizzle(#selector(prepare(for:sender:)), newSelector: #selector(prepareForSegueAction(_:sender:)))
 	}
 	
-	func prepareForSegueAction(_ segue: UIStoryboardSegue, sender: AnyObject?) {
+	@objc func prepareForSegueAction(_ segue: UIStoryboardSegue, sender: AnyObject?) {
 		prepareForSegueAction(segue, sender: sender)
 		segue.perform(action: sender)
 	}

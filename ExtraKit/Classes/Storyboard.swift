@@ -30,7 +30,7 @@ extension UIViewController {
 		self.performSegue(withIdentifier: segue.segueID, action: action)
 	}
 
-	public func performSegue(withIdentifier identifier: String, action: @escaping (UIStoryboardSegue)->Void) {
+	@objc public func performSegue(withIdentifier identifier: String, action: @escaping (UIStoryboardSegue)->Void) {
 		self.performSegue(withIdentifier: identifier, sender: SegueAction(action))
 	}
 }
