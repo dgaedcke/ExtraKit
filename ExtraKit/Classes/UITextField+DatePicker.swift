@@ -31,6 +31,11 @@ public extension UITextField
 	@objc @discardableResult func set(datePickerMode mode:UIDatePicker.Mode, dateFormatter: DateFormatter) -> DatePickerInputView {
 
 		let picker = DatePickerInputView()
+		if #available(iOS 13.4, *) {
+			picker.preferredDatePickerStyle = UIDatePickerStyle.wheels
+		} else {
+			// Fallback on earlier versions
+		}
 		picker.dateFormatter = dateFormatter
 		picker.datePickerMode = mode
 		picker.textField = self
