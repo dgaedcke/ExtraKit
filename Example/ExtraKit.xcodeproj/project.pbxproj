@@ -13,7 +13,7 @@
 
 /* Begin PBXFileReference section */
 		1AEE1EC25B48975267783C2D /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
-		43C73E71280B9D3EF13508C0 /* ExtraKit.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = ExtraKit.podspec; path = ../ExtraKit.podspec; sourceTree = "<group>"; };
+		43C73E71280B9D3EF13508C0 /* ExtraKit.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = ExtraKit.podspec; path = ../ExtraKit.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		46195166C3AD11BF34759223 /* Pods_ExtraKit_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ExtraKit_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		553E6ED9DA83766E3BF64D8F /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		607FACE51AFB9204008FA782 /* ExtraKit_Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ExtraKit_Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
